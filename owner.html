@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#0b0c0e">
+  <title>لوحة المالك | YS Group</title>
+  <link rel="icon" href="images/logo.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="backend-config.js" defer></script>
+  <script src="owner.js" defer></script>
+</head>
+<body>
+  <div class="brand-watermark" aria-hidden="true"><img src="images/logo.png" alt=""></div>
+  <header class="site-header">
+    <div class="header-inner wrap">
+      <a class="brand" href="index.html" aria-label="YS Group">
+        <img src="images/logo.png" alt="" width="48" height="48">
+        <span><strong>YS GROUP</strong><small>لوحة متابعة الطلبات</small></span>
+      </a>
+      <a class="button button-outline button-small" href="index.html">العودة إلى الموقع</a>
+    </div>
+  </header>
+
+  <main class="owner-main wrap">
+    <header class="owner-heading">
+      <p class="section-kicker">إدارة الطلبات</p>
+      <h1>لوحة <em>المالك</em></h1>
+      <p>عرض استفسارات العملاء ومتابعة حالة كل طلب. لا تظهر بيانات العملاء إلا بعد تسجيل دخول المالك.</p>
+    </header>
+
+    <section class="owner-alert" id="setupNotice" role="status" hidden>
+      <h2>يلزم إعداد Supabase</h2>
+      <p>أضيفي رابط المشروع وAnon key في <code>backend-config.js</code>، ثم أنشئي جدول الطلبات وسياسات الحماية من ملف الإعداد.</p>
+      <a class="button button-outline button-small" href="supabase-schema.sql" download>تحميل ملف إعداد قاعدة البيانات</a>
+    </section>
+
+    <section class="owner-panel" id="loginPanel">
+      <h2>تسجيل دخول المالك</h2>
+      <p class="owner-muted">استخدمي حساب المالك الذي أُنشئ في Supabase Auth.</p>
+      <form id="ownerLogin" class="owner-login-form">
+        <label for="ownerEmail">البريد الإلكتروني</label>
+        <input id="ownerEmail" name="email" type="email" autocomplete="username" required>
+        <label for="ownerPassword">كلمة المرور</label>
+        <input id="ownerPassword" name="password" type="password" autocomplete="current-password" required>
+        <button class="button button-gold" type="submit">دخول آمن</button>
+        <p class="owner-message" id="loginMessage" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <section class="owner-dashboard" id="ownerDashboard" hidden>
+      <div class="dashboard-toolbar">
+        <div>
+          <p class="owner-muted">تم تسجيل الدخول باسم</p>
+          <strong id="ownerIdentity"></strong>
+        </div>
+        <div class="toolbar-actions">
+          <button class="button button-outline button-small" id="refreshOrders" type="button">تحديث الطلبات</button>
+          <button class="button button-outline button-small" id="ownerLogout" type="button">تسجيل الخروج</button>
+        </div>
+      </div>
+      <p class="owner-message" id="dashboardMessage" role="status" aria-live="polite"></p>
+      <div class="owner-stats" aria-label="ملخص الطلبات">
+        <article><span>كل الطلبات</span><strong id="totalOrders">0</strong></article>
+        <article><span>جديدة</span><strong id="newOrders">0</strong></article>
+        <article><span>قيد المتابعة</span><strong id="activeOrders">0</strong></article>
+      </div>
+      <div class="orders-toolbar">
+        <label for="orderSearch">بحث بالاسم أو الهاتف أو المنتج</label>
+        <input id="orderSearch" type="search" autocomplete="off">
+        <label for="statusFilter">تصفية الحالة</label>
+        <select id="statusFilter">
+          <option value="all">كل الحالات</option>
+          <option value="new">جديد</option>
+          <option value="contacted">تم التواصل</option>
+          <option value="in_progress">قيد المتابعة</option>
+          <option value="completed">مكتمل</option>
+          <option value="cancelled">ملغي</option>
+        </select>
+      </div>
+      <div class="orders-table-scroll" tabindex="0" role="region" aria-label="قائمة كل الطلبات">
+        <table class="orders-table">
+          <thead>
+            <tr>
+              <th>تاريخ الطلب</th>
+              <th>العميل / الشركة</th>
+              <th>الهاتف</th>
+              <th>المنتج والكمية</th>
+              <th>نوع الطلب</th>
+              <th>التفاصيل</th>
+              <th>طريقة الدفع</th>
+              <th>الحالة والإجراء</th>
+            </tr>
+          </thead>
+          <tbody id="ordersTableBody"></tbody>
+        </table>
+      </div>
+      <p class="empty-orders" id="emptyOrders" hidden>لا توجد طلبات تطابق البحث الحالي.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-bottom wrap"><span>YS GROUP — معلومات الطلبات محمية بتسجيل الدخول وسياسات قاعدة البيانات.</span><a href="index.html">العودة إلى صفحة العميل</a></div>
+  </footer>
+</body>
+</html>
